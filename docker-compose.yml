@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  api:
+    container_name: api_generic
+    env_file:
+      - .env
+    build: .
+    command: npm run dev
+    ports:
+      - ${API_PORT}:${API_PORT}
+    volumes:
+      - .:/usr/app
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+    networks:
+      - api-generic
+
+  database:
+    image: postgres:latest
+    volumes:
+      - './.postgres-data:/var/lib/postgresql/data'
+    restart: always
+    ports:
+      - ${DB_PORT}:5432
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    networks:
+      - api-generic
+
+networks:
+  api-generic:
+    driver: bridge
