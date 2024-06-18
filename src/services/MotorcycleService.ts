@@ -1,4 +1,4 @@
-import { db } from '@/database/lib/drizzle'
+import { db } from '@/database/drizzle'
 import { Motorcycle, motorcycleTable } from '@/database/schemas/Motorcycle'
 
 export class MotorcycleService {
@@ -9,8 +9,6 @@ export class MotorcycleService {
   }
 
   static async create(body: Motorcycle) {
-    console.log({ body })
-
     const motorcycle = await db.insert(motorcycleTable).values(body).returning()
 
     return motorcycle

@@ -1,7 +1,7 @@
 import { NodePgDatabase, drizzle } from 'drizzle-orm/node-postgres'
 import { Pool } from 'pg'
 
-import { Env } from '../schemas/Env'
+import { Env } from './schemas/Env'
 
 class Drizzle {
   private static db: NodePgDatabase<Record<string, never>> | null = null

@@ -1,4 +1,11 @@
-import { integer, pgEnum, pgTable, serial, varchar } from 'drizzle-orm/pg-core'
+import {
+  integer,
+  pgEnum,
+  pgTable,
+  timestamp,
+  uuid,
+  varchar,
+} from 'drizzle-orm/pg-core'
 import { createInsertSchema } from 'drizzle-zod'
 
 export const statusEnum = pgEnum('status', [
@@ -8,12 +15,14 @@ export const statusEnum = pgEnum('status', [
 ])
 
 export const motorcycleTable = pgTable('motorcycle', {
-  id: serial('id').primaryKey().notNull(),
+  id: uuid('id').primaryKey().defaultRandom(),
   code: varchar('code').unique().notNull(),
   model: varchar('model').notNull(),
   price: integer('price').notNull(),
   color: varchar('color').notNull(),
   status: statusEnum('status').notNull(),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+  updatedAt: timestamp('updatedAt').notNull().defaultNow(),
 })
 
 export const MotorcycleSchema = createInsertSchema(motorcycleTable)
