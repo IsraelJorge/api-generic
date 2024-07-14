@@ -1,12 +1,15 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 
-import { Motorcycle } from '@/database/schemas/Motorcycle'
+import { Motorcycle, MotorcycleQuery } from '@/database/schemas/Motorcycle'
 import { MotorcycleService } from '@/services/MotorcycleService'
 
 export class MotorcycleController {
-  static async index(request: FastifyRequest, reply: FastifyReply) {
+  static async index(
+    request: FastifyRequest<{ Querystring: MotorcycleQuery }>,
+    reply: FastifyReply,
+  ) {
     try {
-      const motorcycles = await MotorcycleService.findAll()
+      const motorcycles = await MotorcycleService.findAll(request)
 
       return reply.send(motorcycles)
     } catch (error) {

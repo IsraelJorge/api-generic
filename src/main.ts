@@ -2,11 +2,18 @@ import fastify from 'fastify'
 
 import cors from '@fastify/cors'
 import formbody from '@fastify/formbody'
+import {
+  serializerCompiler,
+  validatorCompiler,
+} from 'fastify-type-provider-zod'
 
 import { Env } from './database/schemas/Env'
 import { motorcycleRoutes } from './routes/motorcycleRoute'
 
 const app = fastify()
+
+app.setValidatorCompiler(validatorCompiler)
+app.setSerializerCompiler(serializerCompiler)
 
 app.register(cors, {
   origin: true,

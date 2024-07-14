@@ -1,3 +1,4 @@
+import { PageParamsSchema } from '@/shared/schemas/Pagination'
 import {
   integer,
   pgEnum,
@@ -7,6 +8,7 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core'
 import { createInsertSchema } from 'drizzle-zod'
+import { z } from 'zod'
 
 export const statusEnum = pgEnum('status', [
   'in_stock',
@@ -26,5 +28,14 @@ export const motorcycleTable = pgTable('motorcycle', {
 })
 
 export const MotorcycleSchema = createInsertSchema(motorcycleTable)
+export const MotorcycleStatusSchema = z.enum(statusEnum.enumValues)
 
 export type Motorcycle = typeof motorcycleTable.$inferInsert
+
+export const MotorcycleQuerySchema = PageParamsSchema.extend({
+  model: z.string().optional(),
+  color: z.string().optional(),
+  status: MotorcycleStatusSchema.optional(),
+})
+
+export type MotorcycleQuery = z.infer<typeof MotorcycleQuerySchema>
